@@ -1,0 +1,20 @@
+body{
+  font-family: "Gill Sans", "Gill Sans MT", "Calibri", "sans-serif";
+}
+.panel{
+  margin: 10px;
+  padding: 5px;
+}
+.left{
+  float:left;
+}
+.right{
+  float:right;
+}
+.end{
+  clear:right;
+}
+
+fieldset {
+  margin-top:15px;
+}

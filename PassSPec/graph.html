@@ -1,0 +1,33 @@
+<h3>%id</h3>
+<div>
+<canvas id="%id" width="200" height="100" style="border:1px solid #000000;">
+</canvas>
+<script>
+var %id = function(){
+var points=%points;
+var draw = function(){
+  var width = window.innerWidth - 100;
+  var height = 100;
+  var canvas = document.getElementById("%id");
+  canvas.width = width
+  canvas.height = height
+  var c = canvas.getContext("2d");
+  c.moveTo(points[0].x*width, height - points[0].y*height)
+  for(var i = 1; i<points.length; i++){
+    c.lineTo(points[i].x * width, height - points[i].y * height);
+    c.stroke();
+  }
+}
+draw();
+$(window).bind('resize', function () { 
+  draw();
+});
+}();
+</script>
+<form action="/form/new_value">
+  <input type="hidden" name="series" value="%id"/>
+  Date and Time: <input type="date" name="date" id="date"/><br/>
+  Value: <input type="text" name="value" id="value"/><br/>
+  <input type="submit"/>
+</form>
+</div>

@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',
+  filename='style.css') }}">
+    <link rel="stylesheet" type="text/css"  href="{{ url_for('static',
+  filename='jquery-ui.css') }}">
+    <script type="text/javascript"  src="{{ url_for('static',
+  filename='jquery.js') }}">
+    </script>
+    <script type="text/javascript"   src="{{ url_for('static',
+  filename='jquery-ui.js') }}">
+    </script>
+  </head>
+  <body>
+  <ul class=navigation>
+  <li><a href="{{ url_for('index') }}">overview</a>
+  {% if g.user %}
+  <li><a href="{{ url_for('edit_profile') }}">profile</a>
+  <li><a href="{{ url_for('logout') }}">sign out [{{ g.user.name }}]</a>
+  {% else %}
+  <li><a href="{{ url_for('login') }}">sign in</a>
+  {% endif %}
+  </ul>
+   <div class="topaccordion">
+    {{graphs|safe}}
+    <h3>New Series</h3>
+    <form action="{{ url_for('add_value') }}" method=post>
+      Name: <input type="text" name="series"/>
+      <p>Start your new series with an initial value</p>
+      Date: <input type="date" name="date" id="date"/><br/>
+      Value: <input type="text" name="value" id="value"/><br/>
+      <input type="submit"/>
+    </form>
+   </div>
+  <body>
+  <script>
+    $(function() {
+      $(".topaccordion").accordion({
+          collapsible:true, 
+          heightStyle:"content"
+          })
+    });
+</script>
+
+</html>

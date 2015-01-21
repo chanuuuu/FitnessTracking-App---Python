@@ -1,0 +1,150 @@
+<html manifest="/cache.manifest">
+  <head>
+    <link rel="stylesheet" type="text/css" href="/static/style.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/jquery-ui.css">
+    <script type="text/javascript" src="/static/jquery.js"></script>
+    <script type="text/javascript" src="/static/jquery-ui.js"></script>
+    <script>
+       
+
+       /*
+          Adding the form values to local variables
+          As there are multiple forms ,this function checks for the form whose values are submitted
+       */
+      function savetolocal(f){
+
+        var name,obj,d,v;
+
+        if(f.series.value != null){
+
+          name = f.series.value;
+
+        }
+
+        if(f.date.value != null){
+          d = f.date.value;
+        }
+
+        if(f.Value.value){
+          v = f.Value.value;
+        }
+
+      obj = {
+        "date": d,
+        "value": v
+      }
+
+       /*
+          Making a post reuquest to send the form values .If fails values are added to localStorage
+       */
+
+       $.post("/form/new_value",
+       {
+         series:name,
+         date:obj["date"],
+         Value:obj["value"]
+       },function(){
+         alert("form submitted");
+       }); 
+
+
+        //applicationCache.update();
+
+       /* $.getJSON("/normalise",{ser:name},function(result){
+
+          updateChart(result);
+
+        } );  */
+
+      /*
+      $.getJSON("/series/"+name,function(result){
+        updateChart(result);
+      }); */ 
+      
+      
+      /*
+         Executes if an ajax call fails .Stores the form values to localSotrage
+      */
+      $(document).ajaxError(function(){
+        alert("offline");
+        put_it(name, obj);
+      }); 
+       return false;
+      }
+
+     
+    function put_it(i, obj){localStorage[i] = JSON.stringify(obj);}
+    function get_it(i){return JSON.parse(localStorage[i]);}
+
+
+     /*
+       Updates the chart of the series after entering the new values
+     */
+    function updateChart(points){
+      //var points = eval ("(" + jobj + ")");
+      alert("Generating new chart");
+      //var width=200;
+      var height=100;
+      var width = window.innerWidth - 100;
+      var canvas = document.getElementById(name);
+      canvas.width = width;
+      canvas.height = height;
+      var c = canvas.getContext("2d");
+      c.moveTo(points[0].x*width, height - points[0].y*height)
+      for(var i = 1; i<points.length; i++){
+        alert("in inner loop");
+      c.lineTo(points[i].x * width, height - points[i].y * height);
+      c.stroke();
+
+      }
+        }
+
+
+    
+    /*
+       When page is loaded ,items in localSotrage will be sent to server by making ajax call and removing those items from localStorage 
+    */
+    $(document).ready(function(){
+      if ('localStorage' in window) {
+      for (i in localStorage){
+        var v = localStorage.getItem(i); 
+        var parsed = JSON.parse(v);
+
+        $.post("/form/new_value",
+       {
+         series:i,
+         date:parsed["date"],
+         Value:parsed["value"]
+       },function(){
+         localStorage.removeItem(i);
+
+       });
+      }
+    }
+    });
+
+    </script>
+  </head>
+  <body>
+   <div class="topaccordion">
+    %graphs
+    <h3>New Series</h3>
+    <form>
+      Name: <input type="text" name="series" />
+      <p>Start your new series with an initial value</p>
+      Date: <input type="date" name="date" /><br/>
+      Value: <input type="text" name="Value"/><br/>
+      <input type="button" value="submitData" onclick="savetolocal(this.form)"/>
+    </form>
+   </div>
+  <body>
+  <script>
+    $(function() {
+      $(".topaccordion").accordion({
+          collapsible:true, 
+          heightStyle:"content"
+          })
+    });
+</script>
+
+</html>

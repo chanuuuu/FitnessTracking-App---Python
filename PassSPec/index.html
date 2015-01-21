@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/static/style.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/jquery-ui.css">
+    <script type="text/javascript" src="/static/jquery.js"></script>
+    <script type="text/javascript" src="/static/jquery-ui.js"></script>
+  </head>
+  <body>
+   <div class="topaccordion">
+    %graphs
+    <h3>New Series</h3>
+    <form action="/form/new_value">
+      Name: <input type="text" name="series"/>
+      <p>Start your new series with an initial value</p>
+      Date: <input type="date" name="date" id="date"/><br/>
+      Value: <input type="text" name="value" id="value"/><br/>
+      <input type="submit"/>
+    </form>
+   </div>
+  <body>
+  <script>
+    $(function() {
+      $(".topaccordion").accordion({
+          collapsible:true, 
+          heightStyle:"content"
+          })
+    });
+</script>
+
+</html>
